@@ -1,0 +1,25 @@
+version: '3.3'
+services:
+  redis:
+    image: redis:6.2.1
+    container_name: redis
+    hostname: redis
+    ports:
+      - "6379:6379"
+  es-server:
+    image: blacktop/elasticsearch:7.0.0
+    container_name: es-server
+    hostname: es-server
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    cap_add:
+      - IPC_LOCK
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    command: -E cluster.name=es-skywalking -E path.data=data -E path.logs=logs -E network.host=0.0.0.0 -E node.name=node-1
